@@ -10,6 +10,7 @@ import com.testetecnico.backend_todolist.dto.TaskRequest;
 @RestController
 @RequestMapping("/task")
 @SecurityRequirement(name = "bearerAuth")
+@CrossOrigin(origins = "*")
 public class TaskController extends BaseController {
 
     private final TaskService taskService;

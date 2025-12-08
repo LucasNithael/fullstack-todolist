@@ -1,9 +1,11 @@
 package com.testetecnico.backend_todolist.service;
 
+import com.testetecnico.backend_todolist.dto.TaskResponse;
 import com.testetecnico.backend_todolist.dto.UserRequest;
 import com.testetecnico.backend_todolist.dto.UserResponse;
 import com.testetecnico.backend_todolist.exception.UserAlreadyExistsException;
 import com.testetecnico.backend_todolist.exception.UserNotFoundException;
+import com.testetecnico.backend_todolist.model.Task;
 import com.testetecnico.backend_todolist.model.User;
 import com.testetecnico.backend_todolist.repository.UserRepository;
 import com.testetecnico.backend_todolist.security.TokenService;
@@ -12,6 +14,8 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 
 @Service
@@ -28,6 +32,13 @@ public class UserService {
         this.authenticationManager = authenticationManager;
         this.userRepository = userRepository;
         this.tokenService = tokenService;
+    }
+
+    public List<UserResponse> getAll() {
+        return userRepository.findAll()
+                .stream()
+                .map(this::toResponse)
+                .toList();
     }
 
     public UserResponse login(String username, String password) {
@@ -54,6 +65,14 @@ public class UserService {
 
         this.userRepository.save(user);
 
-        return new UserResponse(user.getId(), user.getUsername(), "");
+        return login(userRequest.username(), userRequest.password());
+    }
+
+    private UserResponse toResponse(User user) {
+        return new UserResponse(
+                user.getId(),
+                user.getUsername(),
+                ""
+        );
     }
 }
