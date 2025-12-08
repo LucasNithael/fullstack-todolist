@@ -1,37 +1,48 @@
 <div class="flex min-h-screen">
-  <!-- Lado esquerdo -->
-  <div class="w-1/2 bg-blue-500 flex items-center justify-center">
+  <div 
+    class="w-1/2 h-screen bg-cover bg-center relative flex items-center justify-center"
+    style="background-image: url('images/esig.png')"
+    >
+    <div class="absolute inset-0 bg-black/75"></div>
     <div class="text-white text-center p-10 flex flex-col items-center">
-      <img src="images/esig-logo.png" alt="Logo">
-      <h1 class="text-4xl font-bold mb-4">Bem-vindo a ESIG Task Manager!</h1>
+      <h1 class="relative z-10 text-white text-5xl font-extrabold tracking-wide drop-shadow-lg">
+        Bem-vindo ao ESIG Task Manager!
+      </h1>
+    <p class="relative z-10 mt-4 text-white/80 text-lg font-light max-w-md">
+        Organize tarefas, acompanhe progresso e trabalhe com mais eficiência.
+    </p>
     </div>
   </div>
 
-  <!-- Lado direito (formulário) -->
   <div class="w-1/2 flex items-center justify-center p-10">
     
     <div class="w-full max-w-md flex flex-col gap-6">
 
-      <h2 class="text-3xl font-semibold text-center">Cadastra-se</h2>
+      <h2 class="text-3xl font-semibold text-center flex flex-col items-center">
+          <img src="images/registro.png" alt="Logo" width="120px">
+          <span>
+              Cadastre-se
+          </span>
+       </h2>
+      
 
-      <!-- Campo username -->
       <div class="flex flex-col">
         <label class="mb-1 font-medium text-gray-700">Username</label>
         <input pInputText [(ngModel)]="user.username" class="w-full" />
       </div>
 
-      <!-- Campo senha -->
       <div class="flex flex-col">
         <label class="mb-1 font-medium text-gray-700">Password</label>
         <p-password [(ngModel)]="user.password" toggleMask class="w-full" inputStyleClass="w-full"></p-password>
       </div>
 
+      
+      <button pButton label="Cadastrar" class="w-full" (click)="register()"></button>
+      
       <p class="text-center text-sm cursor-pointer">
         Já tem uma conta?
         <a routerLink="/login" class="text-blue-600 hover:underline">Login</a>
       </p>
-
-      <button pButton label="Cadastrar" class="w-full" (click)="register()"></button>
 
     </div>
 </div>

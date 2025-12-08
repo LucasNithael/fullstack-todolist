@@ -1,4 +1,23 @@
-FROM ubuntu:latest
-LABEL authors="lucasnithael"
+# Etapa 1: Build da aplicação (Maven + Java 21)
+FROM maven:3.9.6-eclipse-temurin-21 AS build
+WORKDIR /app
 
-ENTRYPOINT ["top", "-b"]
+# Copia o pom.xml e baixa dependências em cache
+COPY pom.xml .
+RUN mvn dependency:go-offline -B
+
+# Copia o restante do projeto e builda
+COPY . .
+RUN mvn clean package -DskipTests
+
+# Etapa 2: Imagem final (Java 21)
+FROM eclipse-temurin:21-jdk
+WORKDIR /app
+
+# Copia o JAR da build
+COPY --from=build /app/target/*.jar app.jar
+
+# Porta padrão (ajuste se usar outra)
+EXPOSE 8080
+
+ENTRYPOINT ["java", "-jar", "app.jar"]

@@ -52,6 +52,7 @@ export class TaskListComponent {
   responsible: Responsible[] = [];
   tasks: Task[] = [];
   tasksSearch: Task[] = [];
+  tasksCompleted: Task[] = [];
 
   taskSearch: TaskCreate = {
     title: '',
@@ -89,6 +90,7 @@ export class TaskListComponent {
 
       const tasks: Task[] = response.data;
       this.tasksSearch = tasks;
+      this.tasksCompleted = tasks.filter((task: Task) => task.completed);
 
       this.tasks = tasks
         .filter((task: Task) => !task.completed)
@@ -240,14 +242,15 @@ export class TaskListComponent {
   async remove(id: number) {
     try {
       await this.api.deleteTask(id);
-      await this.getTasks();
-
+      
       this.messageService.add({
         severity: 'success',
         summary: 'Sucesso',
         detail: 'Tarefa excluída com sucesso.',
       });
-
+      
+      await this.getTasks();
+      await this.search();
     }
     catch (error : any) {
       this.messageService.add({
