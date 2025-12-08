@@ -92,6 +92,7 @@
                 <th class="font-semibold p-3">Título</th>
                 <th class="font-semibold p-3">Responsável</th>
                 <th class="font-semibold p-3">Prioridade</th>
+                <th class="font-semibold p-3">Dias Restantes</th>
                 <th class="font-semibold p-3">Ações</th>
               </tr>
             </ng-template>
@@ -102,6 +103,7 @@
                 <td class="p-3">{{ task.title }}</td>
                 <td class="p-3">{{ task.responsible.username }}</td>
                 <td class="p-3">{{ priorityLabels[task.priority] }}</td>
+                <td class="p-3">{{ daysCounter(task.deadline) }}</td>
                 <td class="p-3 text-blue-700 space-x-3">
                   <button class="hover:underline cursor-pointer border-r pr-3 border-gray-300" (click)="showDialog(task)">Editar</button>
                   <button class="hover:underline cursor-pointer border-r pr-3 border-gray-300" (click)="remove(task.id)">Excluir</button>

@@ -309,4 +309,11 @@ export class TaskListComponent {
       this.taskCreate.responsibleId !== 0
     );
   }
+
+  daysCounter(deadline: string): number {
+    const deadlineDate = new Date(deadline);
+    const currentDate = new Date();
+    const timeDiff = deadlineDate.getTime() - currentDate.getTime();
+    return Math.ceil(timeDiff / (1000 * 3600 * 24));
+  }
 }

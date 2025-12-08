@@ -18,6 +18,6 @@ WORKDIR /app
 COPY --from=build /app/target/*.jar app.jar
 
 # Porta padrão (ajuste se usar outra)
-EXPOSE 8080
+EXPOSE 80
 
 ENTRYPOINT ["java", "-jar", "app.jar"]
