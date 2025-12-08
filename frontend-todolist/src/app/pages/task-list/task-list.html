@@ -1,0 +1,207 @@
+<div class="flex min-h-screen bg-gray-50 p-10">
+
+  <div class="w-full max-w-5xl mx-auto">
+
+    <!-- CARD principal -->
+    <div class="shadow-xl rounded-xl overflow-hidden bg-white">
+
+      <!-- TÍTULO -->
+      <div class="px-6 py-4 border-b  text-white flex items-center gap-4  bg-gray-200">
+        <img src="images/esig-logo.png" alt="Logo" class="w-36">
+        <h1 class="text-3xl font-semibold text-gray-600">Listagem de Tarefas</h1>
+        <span class="flex items-center ml-auto cursor-pointer border border-gray-400 rounded px-3 py-2 hover:bg-gray-400" title="Logout" (click)="logout()">
+            <i class="pi pi-sign-out ml-auto text-gray-700"></i>
+        </span>
+      </div>
+
+      <div class="p-6">
+
+        <!-- FILTROS -->
+        <div class="flex flex-col gap-6 mb-8">
+
+          <!-- Linha 1 -->
+          <div class="flex flex-wrap gap-6">
+
+            <div class="flex flex-col w-40">
+              <label class="font-semibold mb-1 text-gray-700">Número:</label>
+              <input pInputText type="text" [(ngModel)]="taskSearch.id" class="w-full" />
+            </div>
+
+            <div class="flex flex-col flex-1 min-w-[250px]">
+              <label class="font-semibold mb-1 text-gray-700">Título / Descrição:</label>
+              <input pInputText type="text" [(ngModel)]="taskSearch.title" class="w-full" />
+            </div>
+
+          </div>
+
+          <!-- Linha 2 -->
+          <div class="flex flex-wrap gap-6 items-end">
+
+            <div class="flex flex-col w-60">
+              <label class="font-semibold mb-1 text-gray-700">Responsável:</label>
+              <p-select
+                [options]="responsible"
+                placeholder="Selecione"
+                [(ngModel)]="taskSearch.responsibleId"
+                class="w-full"
+              />
+            </div>
+
+            <div class="flex flex-col w-60">
+              <label class="font-semibold mb-1 text-gray-700">Situação:</label>
+              <p-select
+                [options]="situations"
+                placeholder="Selecione"
+                [(ngModel)]="taskSearch.completed"
+                class="w-full"
+              />
+            </div>
+
+            <div class="flex items-center gap-3">
+              <button pButton label="Buscar Tarefas" class="px-6 py-2" (click)="search()">
+                <i class="pi pi-search mr-2"></i>
+              </button>
+              <button pButton label="Limpar Filtros" class="px-6 py-2" (click)="clearSearch()">
+                <i class="pi pi-times mr-2"></i>
+              </button>
+            </div>
+
+          </div>
+
+        </div>
+
+        <div class="flex justify-end mb-4">
+            <button 
+                pButton 
+                label="Cadastrar Tarefa" 
+                icon="pi pi-plus"
+                class="px-4 py-2"
+                (click)="showDialog()"
+                >
+            </button>
+        </div>
+
+        <!-- TABELA -->
+        <div class="rounded-lg overflow-hidden shadow-md">
+          <p-table
+            [value]="tasks"
+            styleClass="p-datatable-gridlines"
+          >
+
+            <ng-template pTemplate="header">
+              <tr class="bg-gray-200">
+                <th class="font-semibold p-3">Número</th>
+                <th class="font-semibold p-3">Título</th>
+                <th class="font-semibold p-3">Responsável</th>
+                <th class="font-semibold p-3">Prioridade</th>
+                <th class="font-semibold p-3">Ações</th>
+              </tr>
+            </ng-template>
+
+            <ng-template pTemplate="body" let-task>
+              <tr>
+                <td class="p-3">{{ task.id }}</td>
+                <td class="p-3">{{ task.title }}</td>
+                <td class="p-3">{{ task.responsible.username }}</td>
+                <td class="p-3">{{ priorityLabels[task.priority] }}</td>
+                <td class="p-3 text-blue-700 space-x-3">
+                  <button class="hover:underline cursor-pointer border-r pr-3 border-gray-300" (click)="showDialog(task)">Editar</button>
+                  <button class="hover:underline cursor-pointer border-r pr-3 border-gray-300" (click)="remove(task.id)">Excluir</button>
+                  <button class="hover:underline cursor-pointer" (click)="complete(task)">Concluir</button>
+                </td>
+              </tr>
+            </ng-template>
+
+          </p-table>
+        </div>
+
+      </div>
+
+        <p-dialog 
+            header="Cadastrar Tarefa"
+            [modal]="true"
+            [(visible)]="visible"
+            [style]="{ width: '50rem' }"
+            [contentStyle]="{ 'max-height': '70vh', 'overflow': 'auto' }"
+        >
+
+            <ng-template pTemplate="content">
+
+                <span class="p-text-secondary block mb-6">
+                    Preencha as informações para criar uma nova tarefa.
+                </span>
+
+                <!-- Título -->
+                <div class="flex flex-col">
+                    <label for="title" class="font-semibold mb-1">Título</label>
+                    <input [(ngModel)]="taskCreate.title" pInputText id="title" class="w-full" autocomplete="off" />
+                </div>
+
+                <!-- Descrição -->
+                <div class="flex flex-col">
+                    <label for="description" class="font-semibold mb-1">Descrição</label>
+                    <textarea [(ngModel)]="taskCreate.description" pInputText id="description" class="w-full"></textarea>
+                </div>
+
+                <!-- Deadline / Prioridade / Responsável -->
+                <div class="grid grid-cols-3 gap-5 mt-4">
+                    
+                    <div class="flex flex-col">
+                        <label for="deadline" class="font-semibold mb-1">Deadline</label>
+                        <p-date-picker 
+                            id="deadline" 
+                            [(ngModel)]="taskCreate.deadline"
+                            dateFormat="dd/mm/yy"
+                            appendTo="body"
+                            >
+                        </p-date-picker>
+                    </div>
+
+                    <div class="flex flex-col">
+                        <label for="priority" class="font-semibold mb-1">Prioridade</label>
+                        <p-select 
+                            id="priority"
+                            [options]="priorities"
+                            placeholder="Selecione"
+                            [(ngModel)]="taskCreate.priority"
+                            appendTo="body"
+                            >
+                        </p-select>
+                    </div>
+                    
+                    <div class="flex flex-col">
+                        <label class="font-semibold mb-1">Responsável</label>
+                        <p-select 
+                            [options]="responsible"
+                            placeholder="Selecione"
+                            [(ngModel)]="taskCreate.responsibleId"
+                            appendTo="body"
+                            >
+                        </p-select>
+                    </div>
+                </div>
+
+            </ng-template>
+
+            <ng-template pTemplate="footer">
+                <div class="flex justify-end gap-3">
+
+                    <p-button 
+                        label="Cancelar" 
+                        severity="secondary"
+                        (click)="visible = false">
+                    </p-button>
+
+                    <p-button 
+                        label="Salvar"
+                        (click)="saveTask()">
+                    </p-button>
+                </div>
+            </ng-template>
+
+        </p-dialog>
+
+    </div>
+  </div>
+
+</div>
