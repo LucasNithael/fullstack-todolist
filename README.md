@@ -12,8 +12,7 @@ Sistema de gerenciamento de tarefas, desenvolvido com **Angular** no front-end e
 - **API REST:** Todos os endpoints seguem a semântica correta dos verbos HTTP.  
 - **Autenticação:** Implementada com **JWT**, com endpoints para registro e login de usuários.  
 - **Documentação:** API documentada com **Swagger**.  
-- **Deploy:** Projeto hospedado no **Google Cloud** com domínio próprio e certificados **SSL**.  
-- **Testes:** Possibilidade de rodar testes unitários e de integração (Maven).  
+- **Deploy:** Projeto hospedado no **Google Cloud** com domínio próprio e certificados **SSL**. 
 
 ---
 
